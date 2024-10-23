@@ -1,28 +1,32 @@
 const express = require("express");
-const {adminAuth, userAuth}  = require("./middlewares/auth");
+const connectDB = require("./config/database")
+const User = require("./models/user");
 
 const app = express();
 
+app.post("/signup", async (req, res) => {
+    const user = new User({
+        firstName: "Monika",
+        lastName: "Khanka",
+        emailId: "monikakhanka@gmail.com",
+        password: "monika@123",
+    });
 
-// Handle Auth middleware
-// handle admin auth
-app.use("/admin", adminAuth);
-
-// handle user auth
-app.use("/user", userAuth, (req, res, next) => {
-    res.send("All user data sent");
+    try{
+        await user.save();
+    res.send("user added sucessfully");
+    }catch(err){
+        res.status(400).send("error adding user to db:" + err.message);
+    }
 });
 
-app.get("/admin/getAllData",(req, res, next) => {
-    res.send("All data sent");
-});
 
-app.get("/admin/deleteUser", (req, res, next) => {
-    res.send("Deleted user");
-});
-
-
-
-app.listen(3000, ()=>{
-    console.log("Server listening")
-});
+connectDB().then(()=>{
+    console.log("Database connection successful");
+    app.listen(3000, ()=>{
+        console.log("Server listening")
+    });
+})
+.catch(err => {
+    console.log("Db cannot be connected");
+})
