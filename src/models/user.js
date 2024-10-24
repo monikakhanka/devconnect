@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const validator = require("validator");
 const userSchema = new mongoose.Schema({
     firstName: {
         type: String,
@@ -17,12 +17,22 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true,
         lowercase: true,
-        trim: true
+        trim: true,
+        validate(value){
+            if(!validator.isEmail(value)){
+                throw new Error("Invalid email id "+value);
+            }
+        }
     },
     password: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        validate(value){
+            if(!validator.isStrongPassword(value)){
+                throw new Error("Enter a strong password");
+            }
+        }
     },
     age: {
         type: Number,
@@ -41,6 +51,11 @@ const userSchema = new mongoose.Schema({
     photoUrl: {
         type: String,
         default: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNKfj6RsyRZqO4nnWkPFrYMmgrzDmyG31pFQ&s",
+        validate(value){
+            if(!validator.isURL(value)){
+                throw new Error("Invalid photo url "+value);
+            }
+        }
     },
     about:{
         type: String,

@@ -1,6 +1,7 @@
 const express = require("express");
 const connectDB = require("./config/database")
 const User = require("./models/user");
+const validator = require("validator");
 
 const app = express();
 
@@ -11,6 +12,9 @@ app.post("/signup", async (req, res) => {
     const user = new User(req.body);
 
     try{
+    // if(!validator.isEmail(user.emailId)){
+    //     throw new Error("Please enter a valid email id")
+    // }    
     await user.save();
     res.send("user added sucessfully");
     }catch(err){
@@ -70,11 +74,7 @@ app.patch("/user/:userId", async (req, res) => {
         throw new Error("Update not allowed");
     }
 
-    if(data?.skills.length > 5){
-        throw new Error("Update not allowed for more than 4 skills");
-    }
-
-    const user = await User.findByIdAndUpdate(userId, data, {returnDocument: "after"});
+    const user = await User.findByIdAndUpdate(userId, data, {returnDocument: "after", runValidators: true});
     console.log(user);
     res.send("user data updated");
 
