@@ -11,7 +11,7 @@ app.post("/signup", async (req, res) => {
     const user = new User(req.body);
 
     try{
-        await user.save();
+    await user.save();
     res.send("user added sucessfully");
     }catch(err){
         res.status(400).send("error adding user to db:" + err.message);
@@ -58,16 +58,28 @@ app.delete("/user", async (req, res) => {
 });
 
 // updating a user in db using findByIdAndUpdate
-app.patch("/user", async (req, res) => {
-    const userId = req.body.userId;
+app.patch("/user/:userId", async (req, res) => {
+    const userId = req.params?.userId;
     const data = req.body;
     try{
+        
+    const ALLOWED_UPDATES = ["photoUrl", "about", "gender","skills"];
+    const isUpdateAllowed = Object.keys(data).every((k)=> ALLOWED_UPDATES.includes(k));
+    
+    if(!isUpdateAllowed){
+        throw new Error("Update not allowed");
+    }
+
+    if(data?.skills.length > 5){
+        throw new Error("Update not allowed for more than 4 skills");
+    }
+
     const user = await User.findByIdAndUpdate(userId, data, {returnDocument: "after"});
     console.log(user);
     res.send("user data updated");
 
     }catch(err){
-        res.status(400).send("Something went wrong");   
+        res.status(400).send("Something went wrong "+ err.message);   
     }
 
 });
