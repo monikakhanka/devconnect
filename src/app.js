@@ -1,13 +1,16 @@
 const express = require("express");
+const app = express();
 const connectDB = require("./config/database")
 const User = require("./models/user");
 const validator = require("validator");
 const validateSignUpData = require("./utils/validation");
 const bcrypt = require("bcrypt");
-
-const app = express();
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
+const {userAuth} = require("./middlewares/auth");
 
 app.use(express.json());
+app.use(cookieParser());
 
 // sign up api for adding user in db
 app.post("/signup", async (req, res) => {
@@ -35,7 +38,6 @@ app.post("/signup", async (req, res) => {
     }
 });
 
-
 // post api to login the user
 app.post("/login", async (req, res) => {
     const { emailId, password } = req.body;
@@ -47,6 +49,8 @@ app.post("/login", async (req, res) => {
         }
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if(isPasswordValid){
+            const token = await jwt.sign({_id: user._id}, "DEV@India$987");
+            res.cookie("token", token)
             res.send("user successfully logged in");
         }else{
             throw new Error("Invalid credentials")
@@ -56,6 +60,24 @@ app.post("/login", async (req, res) => {
     }
 });
 
+// profile api
+app.get("/profile", userAuth, async(req, res)=>{
+
+    // here first userAuth middleware will be called to authenticate the user using jwt token
+    // middleware will return the user in req.user which is send in response
+    try{
+    const user = req.user;    
+    res.send(user);
+    }catch(err){
+        res.status(400).send("Error: "+ err.message);
+    }
+});
+
+app.post("/sendConnectionRequest", userAuth, async (req, res)=>{
+    const user = req.user;
+    console.log(user.firstName+" sending connection request");
+    res.send(user.firstName+ " connection request sent");
+});
 
 // get a user from db using email id
 app.get("/user", async (req, res) => {
