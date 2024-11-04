@@ -42,11 +42,15 @@ const userSchema = new mongoose.Schema({
     },
     gender: {
         type: String,
-        validate(value){
-            if(!["Male", "Female", "Others"].includes(value)){
-                throw new Error("Gender data is invalid");
-            }
-        }
+        enum: {
+            values: ["Male", "Female", "Others"],
+            message: `{VALUE} is not a valid gender`
+        },
+        // validate(value){
+        //     if(!["Male", "Female", "Others"].includes(value)){
+        //         throw new Error("Gender data is invalid");
+        //     }
+        // }
     },
     skills:{
         type: [],
@@ -62,7 +66,7 @@ const userSchema = new mongoose.Schema({
     },
     about:{
         type: String,
-        maxlength: 100
+        maxlength: 1000
     }
 },{timestamps: true});
 
