@@ -14,14 +14,13 @@ profileRouter
 
 connectionRequestRouter
 
-- POST /request/send/:status/:userId { for both interested and ignored request}
-- POST /request/review/accepted/:requestId
-- POST /request/review/rejected/:requestId
+- POST /request/send/:status/:userId { status can be interested or ignored}
+- POST /request/review/:status/:requestId {status can be acepted or rejected}
 
 userRouter
 
+- GET /user/requests/received
 - GET /user/connections
-- GET /user/requests - received
 - GET /user/feed - gets you the profile of other users on platform
 
 status: ignore, interested, accepted, rejected
