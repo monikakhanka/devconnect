@@ -3,9 +3,9 @@ const userRouter = express.Router();
 const {userAuth} = require("../middlewares/auth");
 const ConnectionRequest = require("../models/connectionRequest");
 const User = require("../models/user");
-const USER_SAFE_DATA = "firstName lastName photoUrl about skills";
+const USER_SAFE_DATA = "firstName lastName photoUrl about skills age";
 
-// get all the pending connecction request for loggedIn user
+// get all the pending connection request for loggedIn user
 userRouter.get("/user/requests/recieved", userAuth, async(req, res)=>{
     try{
     const loggedInUser = req.user;
@@ -24,7 +24,7 @@ userRouter.get("/user/requests/recieved", userAuth, async(req, res)=>{
 });
 
 
-// get all the connecction where the status is accepted
+// get all the connection where the status is accepted
 userRouter.get("/user/connections", userAuth,async(req, res) => {
     try{
         const loggedInUser = req.user;
