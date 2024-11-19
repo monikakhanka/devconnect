@@ -4,9 +4,11 @@ const connectDB = require("./config/database")
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
+const port = process.env.PORT || 4000;
+
 app.use(
     cors({
-        origin: "http://localhost:5173",
+        origin: "https://devconnect-9vvg.onrender.com",
         credentials: true, 
     }
 ));
@@ -25,8 +27,8 @@ app.use("/", userRouter);
 
 connectDB().then(()=>{
     console.log("Database connection successful");
-    app.listen(3000, ()=>{
-        console.log("Server listening")
+    app.listen(port, ()=>{
+        console.log("Server listening at port", port)
     });
 })
 .catch(err => {
