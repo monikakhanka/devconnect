@@ -26,6 +26,7 @@ authRouter.post("/signup", async (req, res) => {
 
     res.cookie("token", token, {
         expires: new Date(Date.now() + 8 *3600000),
+        sameSite: 'None'
     });
     res.json({message: "User created successfully", data: savedUser});
 
@@ -46,7 +47,7 @@ authRouter.post("/login", async (req, res) => {
         const isPasswordValid = await user.validatePassword(password);
         if(isPasswordValid){
             const token = await user.getJWT();
-            res.cookie("token", token)
+            res.cookie("token", token, { sameSite: 'None'})
             res.send(user);
         }else{
             throw new Error("Invalid credentials")
@@ -59,11 +60,12 @@ authRouter.post("/login", async (req, res) => {
 
 authRouter.post("/logout", async (req, res) => {
     res.cookie("token", null ,{
-        expires: new Date(Date.now())     // set expiry to now
+        expires: new Date(Date.now()),
+        sameSite: 'None'    // set expiry to now
     });
     
     res.json({message: "user logged out successfully"});
-})
+});
 
 
 module.exports = authRouter;

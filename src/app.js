@@ -3,12 +3,14 @@ const app = express();
 const connectDB = require("./config/database")
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+require('dotenv').config();
 
+const originUrl = process.env.ORIGIN_URL;
 const port = process.env.PORT || 4000;
 
 app.use(
     cors({
-        origin: "https://devconnect-web.onrender.com",
+        origin: originUrl,
         credentials: true, 
     }
 ));

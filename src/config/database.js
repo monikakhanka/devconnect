@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
+require('dotenv').config();
 
+const databaseUrl = process.env.DATABASE_URL;
 const connectDB = async() => {
-    await mongoose.connect("mongodb+srv://monika:W4xLd3jXYEUe6nsa@cluster0.rshmv.mongodb.net/devConnect");
+    await mongoose.connect(databaseUrl);
 };
 
 

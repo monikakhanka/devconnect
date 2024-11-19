@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+require('dotenv').config();
 
+const jwtSecret = process.env.JWT_SECRET; 
 
 const userAuth = async (req, res, next) => {
     // Read token from req cookies
@@ -11,7 +13,8 @@ const userAuth = async (req, res, next) => {
     if(!token){
         return res.status(401).send("Please log in")
     }
-    const decodedObj = await jwt.verify(token, "DEV@India$987");
+    // const decodedObj = await jwt.verify(token, "DEV@India$987");
+    const decodedObj = await jwt.verify(token, jwtSecret);
     const {_id} = decodedObj;
     const user = await User.findById(_id);
 
