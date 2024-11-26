@@ -12,6 +12,26 @@ DEVConnect is a web app designed to help developers connect based on their skill
 - Requests - To display the profiles of all requests received.
 - Logout Page - To log out user.
 
+## Screenshots
+
+- Sign up Page
+  ![Signup Page](devconnect-img/signup.png)
+
+- Login Page
+  ![Login Page](devconnect-img/login.png)
+
+- Profile Page
+  ![Profile update Page](devconnect-img/profile.png)
+
+- Feed Page
+  ![Feed Page](devconnect-img/feed.png)
+
+- Connections Page
+  ![Connections Page](devconnect-img/connections.png)
+  
+- Requests Page
+  ![Connection Requests Page](devconnect-img/connection-request.png)
+
 ## Installation:
 
 Steps to set up the project locally:
